@@ -33,7 +33,7 @@ export default function Home() {
           </h1>
 
           <p className="mt-5 max-w-xl text-lg text-zinc-300">
-            İtemsatış’tan aldığın kodu kullan, Roblox adını yaz, sipariş durumunu profilinden canlı takip et.
+            hesap.com.tr’den aldığın kodu kullan, Roblox adını yaz, sipariş durumunu profilinden canlı takip et.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -54,7 +54,7 @@ export default function Home() {
 
             <div className="rounded-2xl border border-red-500/20 bg-white/5 p-4">
               <div className="text-2xl font-black text-red-400">2</div>
-              <div className="text-xs text-zinc-400">Roblox Yaz</div>
+              <div className="text-xs text-zinc-400">Roblox adını Yaz</div>
             </div>
 
             <div className="rounded-2xl border border-red-500/20 bg-white/5 p-4">
