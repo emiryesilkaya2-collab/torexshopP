@@ -7,6 +7,7 @@ type Order = {
   code: string;
   product: string;
   roblox_username: string;
+  roblox_avatar_url?: string;
   user_email?: string;
   status: string;
   vip_link?: string;
@@ -88,11 +89,23 @@ export default function AdminPage() {
       <div className="mt-6 grid gap-4">
         {orders.map((o) => (
           <div key={o.id} className="rounded-2xl border border-red-500/30 bg-zinc-950 p-5">
-            <div className="text-xl font-black text-red-400">{o.product}</div>
-            <div className="mt-2 text-zinc-300">Roblox: {o.roblox_username}</div>
-            <div className="text-zinc-400">Kod: {o.code}</div>
-            <div className="text-zinc-400">E-posta: {o.user_email || "Girişsiz"}</div>
-            <div className="mt-2 font-bold text-white">Durum: {statusText(o.status)}</div>
+            <div className="flex items-center gap-4">
+              {o.roblox_avatar_url && (
+                <img
+                  src={o.roblox_avatar_url}
+                  alt={o.roblox_username}
+                  className="h-16 w-16 rounded-2xl border border-red-500/30 bg-black"
+                />
+              )}
+
+              <div>
+                <div className="text-xl font-black text-red-400">{o.product}</div>
+                <div className="mt-1 text-zinc-300">Roblox: {o.roblox_username}</div>
+                <div className="text-zinc-400">Kod: {o.code}</div>
+                <div className="text-zinc-400">E-posta: {o.user_email || "Girişsiz"}</div>
+                <div className="mt-2 font-bold text-white">Durum: {statusText(o.status)}</div>
+              </div>
+            </div>
 
             <input
               className="mt-4 w-full rounded-xl border border-red-500/30 bg-black p-3"
