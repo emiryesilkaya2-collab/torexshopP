@@ -1,23 +1,5 @@
 import Link from "next/link";
 
-const products = [
-  {
-    name: "HARVESTER",
-    rarity: "Ancient",
-    emoji: "🏹",
-  },
-  {
-    name: "ICEPIERCER",
-    rarity: "Ancient",
-    emoji: "❄️",
-  },
-  {
-    name: "CORRUPT",
-    rarity: "Godly",
-    emoji: "🗡️",
-  },
-];
-
 export default function Home() {
   return (
     <main className="min-h-screen overflow-hidden bg-black text-white">
@@ -40,53 +22,79 @@ export default function Home() {
         </div>
       </nav>
 
-      <section className="relative z-10 mx-auto max-w-6xl px-6 py-14 text-center">
-        <div className="inline-flex rounded-full border border-red-500/30 bg-red-950/30 px-4 py-2 text-sm font-bold text-red-200">
-          MM2 Premium Market
-        </div>
+      <section className="relative z-10 mx-auto grid max-w-6xl items-center gap-10 px-6 py-16 md:grid-cols-2">
+        <div>
+          <div className="inline-flex rounded-full border border-red-500/30 bg-red-950/30 px-4 py-2 text-sm font-bold text-red-200">
+            MM2 Kod Teslimat Sistemi
+          </div>
 
-        <h1 className="mt-6 text-5xl font-black leading-tight md:text-7xl">
-          MM2 itemlerini güvenli şekilde teslim al.
-        </h1>
+          <h1 className="mt-6 text-5xl font-black leading-tight md:text-7xl">
+            Kodunu gir, <span className="text-red-500">teslimatı</span> takip et.
+          </h1>
 
-        <p className="mx-auto mt-5 max-w-2xl text-lg text-zinc-300">
-          Kodunu kullan, Roblox hesabını doğrula ve siparişini canlı takip et.
-        </p>
+          <p className="mt-5 max-w-xl text-lg text-zinc-300">
+            İtemsatış’tan aldığın kodu kullan, Roblox adını yaz, sipariş durumunu profilinden canlı takip et.
+          </p>
 
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link href="/redeem" className="rounded-2xl bg-red-600 px-8 py-4 font-black shadow-2xl shadow-red-900/40 hover:bg-red-500">
-            KOD KULLAN
-          </Link>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/redeem" className="rounded-2xl bg-red-600 px-8 py-4 font-black shadow-2xl shadow-red-900/40 hover:bg-red-500">
+              KOD KULLAN
+            </Link>
 
-          <Link href="/profile" className="rounded-2xl border border-red-500/40 px-8 py-4 font-black hover:bg-red-950">
-            PROFİL
-          </Link>
-        </div>
-      </section>
-
-      <section className="relative z-10 mx-auto grid max-w-6xl gap-6 px-6 pb-20 md:grid-cols-3">
-        {products.map((product) => (
-          <div key={product.name} className="group overflow-hidden rounded-[2rem] border border-red-500/20 bg-zinc-950/80 p-5 shadow-2xl shadow-black/40 transition-all duration-300 hover:-translate-y-2 hover:border-red-500/60">
-            <div className="flex h-72 items-center justify-center rounded-3xl bg-gradient-to-br from-red-950/70 to-black text-8xl shadow-inner shadow-red-900/30">
-              {product.emoji}
-            </div>
-
-            <div className="mt-5 flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-black text-white">{product.name}</h2>
-                <p className="mt-1 text-sm text-red-400">{product.rarity}</p>
-              </div>
-
-              <div className="rounded-xl border border-red-500/30 bg-red-950/30 px-4 py-2 text-sm font-bold text-red-200">
-                MM2
-              </div>
-            </div>
-
-            <Link href="/redeem" className="mt-5 block rounded-2xl bg-red-600 p-4 text-center text-lg font-black transition-all hover:bg-red-500">
-              TESLİMAT AL
+            <Link href="/profile" className="rounded-2xl border border-red-500/40 px-8 py-4 font-black hover:bg-red-950">
+              SİPARİŞLERİM
             </Link>
           </div>
-        ))}
+
+          <div className="mt-8 grid max-w-xl grid-cols-3 gap-3 text-center">
+            <div className="rounded-2xl border border-red-500/20 bg-white/5 p-4">
+              <div className="text-2xl font-black text-red-400">1</div>
+              <div className="text-xs text-zinc-400">Kod Gir</div>
+            </div>
+
+            <div className="rounded-2xl border border-red-500/20 bg-white/5 p-4">
+              <div className="text-2xl font-black text-red-400">2</div>
+              <div className="text-xs text-zinc-400">Roblox Yaz</div>
+            </div>
+
+            <div className="rounded-2xl border border-red-500/20 bg-white/5 p-4">
+              <div className="text-2xl font-black text-red-400">3</div>
+              <div className="text-xs text-zinc-400">Teslim Al</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-[2rem] border border-red-500/30 bg-black/70 p-6 shadow-2xl shadow-red-900/40">
+          <div className="rounded-3xl border border-red-500/20 bg-gradient-to-br from-red-950/70 to-zinc-950 p-6">
+            <div className="text-sm font-bold text-red-300">Sipariş Durumu</div>
+
+            <div className="mt-4 rounded-2xl bg-black/50 p-5">
+              <div className="text-2xl font-black">HARVESTER</div>
+              <div className="mt-1 text-sm text-zinc-400">Roblox: oyuncu123</div>
+
+              <div className="mt-6 space-y-4">
+                <div className="flex items-center gap-3">
+                  <span className="h-4 w-4 rounded-full bg-red-500 shadow-lg shadow-red-500/50" />
+                  <span className="font-bold">Hazırlanıyor</span>
+                </div>
+
+                <div className="flex items-center gap-3 opacity-70">
+                  <span className="h-4 w-4 rounded-full border border-red-500" />
+                  <span>Hazır / VIP Link</span>
+                </div>
+
+                <div className="flex items-center gap-3 opacity-50">
+                  <span className="h-4 w-4 rounded-full border border-zinc-500" />
+                  <span>Sipariş Tamamlandı</span>
+                </div>
+              </div>
+
+              <Link href="/login" className="mt-6 block rounded-xl bg-red-600 p-3 text-center font-black hover:bg-red-500">
+                Hemen Giriş Yap
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );
