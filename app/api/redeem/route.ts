@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
+function generateTrackingNumber() {
+  return String(Math.floor(100000000000 + Math.random() * 900000000000));
+}
+
 async function checkRobloxUser(username: string) {
   const userRes = await fetch("https://users.roblox.com/v1/usernames/users", {
     method: "POST",
@@ -35,24 +39,23 @@ async function checkRobloxUser(username: string) {
 
 export async function POST(req: Request) {
   try {
-    const { code, roblox_username, user_email } = await req.json();
+    const { code, roblox_username } = await req.json();
 
-    if (!code || !roblox_username || !user_email) {
+    if (!code || !roblox_username) {
       return NextResponse.json(
-        { message: "Kod, Roblox adı ve giriş bilgisi zorunlu." },
+        { message: "Kod ve Roblox adı zorunlu" },
         { status: 400 }
       );
     }
 
     const cleanCode = String(code).trim().toUpperCase();
     const cleanRoblox = String(roblox_username).trim();
-    const cleanEmail = String(user_email).trim();
 
     const robloxUser = await checkRobloxUser(cleanRoblox);
 
     if (!robloxUser) {
       return NextResponse.json(
-        { message: "Roblox kullanıcı adı bulunamadı. Lütfen doğru yaz." },
+        { message: "Roblox kullanıcı adı bulunamadı" },
         { status: 404 }
       );
     }
@@ -65,17 +68,19 @@ export async function POST(req: Request) {
 
     if (error || !found) {
       return NextResponse.json(
-        { message: "Kod bulunamadı." },
+        { message: "Kod bulunamadı" },
         { status: 404 }
       );
     }
 
     if (found.status !== "unused") {
       return NextResponse.json(
-        { message: "Bu kod daha önce kullanılmış." },
+        { message: "Bu kod daha önce kullanılmış" },
         { status: 400 }
       );
     }
+
+    const trackingNumber = generateTrackingNumber();
 
     await supabaseAdmin
       .from("codes")
@@ -84,7 +89,6 @@ export async function POST(req: Request) {
         roblox_username: robloxUser.name,
         roblox_user_id: robloxUser.id,
         roblox_avatar_url: robloxUser.avatarUrl,
-        user_email: cleanEmail,
         used_at: new Date().toISOString(),
       })
       .eq("code", cleanCode);
@@ -93,11 +97,12 @@ export async function POST(req: Request) {
       .from("orders")
       .insert({
         code: cleanCode,
+        tracking_number: trackingNumber,
         product: found.product,
         roblox_username: robloxUser.name,
         roblox_user_id: robloxUser.id,
         roblox_avatar_url: robloxUser.avatarUrl,
-        user_email: cleanEmail,
+        user_email: null,
         status: "preparing",
       })
       .select()
@@ -105,7 +110,7 @@ export async function POST(req: Request) {
 
     if (orderError) {
       return NextResponse.json(
-        { message: "Sipariş oluşturulamadı." },
+        { message: "Sipariş oluşturulamadı" },
         { status: 500 }
       );
     }
@@ -113,11 +118,12 @@ export async function POST(req: Request) {
     return NextResponse.json({
       ok: true,
       order,
-      message: `Kod doğrulandı. Roblox: ${robloxUser.name}. Ürün: ${found.product}. Sipariş hazırlanıyor.`,
+      tracking_number: trackingNumber,
+      message: `Kod doğrulandı ürün ${found.product} takip numaran ${trackingNumber}`,
     });
   } catch {
     return NextResponse.json(
-      { message: "Sunucu hatası oluştu." },
+      { message: "Sunucu hatası oluştu" },
       { status: 500 }
     );
   }
