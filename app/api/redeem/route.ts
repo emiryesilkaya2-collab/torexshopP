@@ -1,6 +1,38 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
+async function checkRobloxUser(username: string) {
+  const userRes = await fetch("https://users.roblox.com/v1/usernames/users", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      usernames: [username],
+      excludeBannedUsers: true,
+    }),
+    cache: "no-store",
+  });
+
+  const userJson = await userRes.json();
+  const user = userJson?.data?.[0];
+
+  if (!user) return null;
+
+  const avatarRes = await fetch(
+    `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=false`,
+    { cache: "no-store" }
+  );
+
+  const avatarJson = await avatarRes.json();
+  const avatarUrl = avatarJson?.data?.[0]?.imageUrl || "";
+
+  return {
+    id: String(user.id),
+    name: user.name,
+    displayName: user.displayName,
+    avatarUrl,
+  };
+}
+
 export async function POST(req: Request) {
   try {
     const { code, roblox_username, user_email } = await req.json();
@@ -15,6 +47,15 @@ export async function POST(req: Request) {
     const cleanCode = String(code).trim().toUpperCase();
     const cleanRoblox = String(roblox_username).trim();
     const cleanEmail = String(user_email).trim();
+
+    const robloxUser = await checkRobloxUser(cleanRoblox);
+
+    if (!robloxUser) {
+      return NextResponse.json(
+        { message: "Roblox kullanıcı adı bulunamadı. Lütfen doğru yaz." },
+        { status: 404 }
+      );
+    }
 
     const { data: found, error } = await supabaseAdmin
       .from("codes")
@@ -40,7 +81,9 @@ export async function POST(req: Request) {
       .from("codes")
       .update({
         status: "used",
-        roblox_username: cleanRoblox,
+        roblox_username: robloxUser.name,
+        roblox_user_id: robloxUser.id,
+        roblox_avatar_url: robloxUser.avatarUrl,
         user_email: cleanEmail,
         used_at: new Date().toISOString(),
       })
@@ -51,7 +94,9 @@ export async function POST(req: Request) {
       .insert({
         code: cleanCode,
         product: found.product,
-        roblox_username: cleanRoblox,
+        roblox_username: robloxUser.name,
+        roblox_user_id: robloxUser.id,
+        roblox_avatar_url: robloxUser.avatarUrl,
         user_email: cleanEmail,
         status: "preparing",
       })
@@ -68,7 +113,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       ok: true,
       order,
-      message: `Kod doğrulandı. Ürün: ${found.product}. Sipariş hazırlanıyor.`,
+      message: `Kod doğrulandı. Roblox: ${robloxUser.name}. Ürün: ${found.product}. Sipariş hazırlanıyor.`,
     });
   } catch {
     return NextResponse.json(
