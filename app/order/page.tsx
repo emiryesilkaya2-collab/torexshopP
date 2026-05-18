@@ -43,7 +43,7 @@ export default function OrderPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(window.location.search);
     const urlTracking = params.get("tracking");
 
     if (urlTracking) {
@@ -53,22 +53,34 @@ export default function OrderPage() {
   }, []);
 
   async function searchOrder(value?: string) {
-    const finalTracking = value || tracking;
+    const finalTracking = (value || tracking).trim();
+
+    if (!finalTracking) {
+      setMsg("Takip numarası gir");
+      return;
+    }
 
     setLoading(true);
     setMsg("");
     setOrder(null);
 
-    const res = await fetch(`/api/order?tracking=${encodeURIComponent(finalTracking)}`);
-    const data = await res.json();
+    try {
+      const res = await fetch(`/api/order?tracking=${encodeURIComponent(finalTracking)}`, {
+        cache: "no-store",
+      });
 
-    if (data.ok) {
-      setOrder(data.order);
-    } else {
-      setMsg(data.message);
+      const data = await res.json();
+
+      if (data.ok) {
+        setOrder(data.order);
+      } else {
+        setMsg(data.message || "Sipariş bulunamadı");
+      }
+    } catch {
+      setMsg("Sorgulama sırasında hata oluştu");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   return (
@@ -139,11 +151,9 @@ export default function OrderPage() {
                 <span className={order.status === "preparing" || order.status === "waiting" ? "text-yellow-400" : "text-zinc-500"}>
                   Hazırlanıyor
                 </span>
-
                 <span className={order.status === "ready" || order.status === "delivered" ? "text-blue-400" : "text-zinc-500"}>
                   Hazır
                 </span>
-
                 <span className={order.status === "delivered" ? "text-green-400" : "text-zinc-500"}>
                   Teslim
                 </span>
