@@ -7,26 +7,17 @@ export default function Home() {
       <div className="absolute left-1/2 top-20 h-72 w-72 -translate-x-1/2 rounded-full bg-red-600/20 blur-3xl" />
 
       <nav className="relative z-10 mx-auto flex max-w-6xl items-center justify-between p-6">
-        <Link
-          href="/"
-          className="text-2xl font-black tracking-widest text-red-500"
-        >
+        <Link href="/" className="text-2xl font-black tracking-widest text-red-500">
           TOREXSHOP
         </Link>
 
         <div className="flex items-center gap-3">
-          <Link
-            href="/login"
-            className="rounded-xl border border-red-500/40 px-4 py-2 text-sm font-bold hover:bg-red-950"
-          >
-            Giriş Yap
+          <Link href="/redeem" className="rounded-xl bg-red-600 px-4 py-2 text-sm font-bold hover:bg-red-500">
+            Kod Kullan
           </Link>
 
-          <Link
-            href="/register"
-            className="rounded-xl bg-red-600 px-4 py-2 text-sm font-bold hover:bg-red-500"
-          >
-            Kayıt Ol
+          <Link href="/order" className="rounded-xl border border-red-500/40 px-4 py-2 text-sm font-bold hover:bg-red-950">
+            Sipariş Takip
           </Link>
         </div>
       </nav>
@@ -38,27 +29,20 @@ export default function Home() {
           </div>
 
           <h1 className="mt-6 text-5xl font-black leading-tight md:text-7xl">
-            Kodunu gir, <span className="text-red-500">teslimatı</span> takip et.
+            Kodunu gir <span className="text-red-500">teslimatı</span> takip et
           </h1>
 
           <p className="mt-5 max-w-xl text-lg text-zinc-300">
-            hesap.com.tr’tan aldığın kodu kullan, Roblox adını yaz,
-            sipariş durumunu profilinden canlı takip et.
+            Hesap açmadan kodunu kullan Roblox adını doğrula ve verilen takip numarasıyla siparişini izle
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/redeem"
-              className="rounded-2xl bg-red-600 px-8 py-4 font-black shadow-2xl shadow-red-900/40 hover:bg-red-500"
-            >
+            <Link href="/redeem" className="rounded-2xl bg-red-600 px-8 py-4 font-black shadow-2xl shadow-red-900/40 hover:bg-red-500">
               KOD KULLAN
             </Link>
 
-            <Link
-              href="/profile"
-              className="rounded-2xl border border-red-500/40 px-8 py-4 font-black hover:bg-red-950"
-            >
-              SİPARİŞLERİM
+            <Link href="/order" className="rounded-2xl border border-red-500/40 px-8 py-4 font-black hover:bg-red-950">
+              SİPARİŞ TAKİP
             </Link>
           </div>
 
@@ -70,7 +54,7 @@ export default function Home() {
 
             <div className="rounded-2xl border border-red-500/20 bg-white/5 p-4">
               <div className="text-2xl font-black text-red-400">2</div>
-              <div className="text-xs text-zinc-400">Roblox adını Yaz</div>
+              <div className="text-xs text-zinc-400">Takip No Al</div>
             </div>
 
             <div className="rounded-2xl border border-red-500/20 bg-white/5 p-4">
@@ -82,16 +66,11 @@ export default function Home() {
 
         <div className="rounded-[2rem] border border-red-500/30 bg-black/70 p-6 shadow-2xl shadow-red-900/40">
           <div className="rounded-3xl border border-red-500/20 bg-gradient-to-br from-red-950/70 to-zinc-950 p-6">
-            <div className="text-sm font-bold text-red-300">
-              Sipariş Durumu
-            </div>
+            <div className="text-sm font-bold text-red-300">Sipariş Takip</div>
 
             <div className="mt-4 rounded-2xl bg-black/50 p-5">
               <div className="text-2xl font-black">HARVESTER</div>
-
-              <div className="mt-1 text-sm text-zinc-400">
-                Roblox: oyuncu123
-              </div>
+              <div className="mt-1 text-sm text-zinc-400">Takip No 772429271518</div>
 
               <div className="mt-6 space-y-4">
                 <div className="flex items-center gap-3">
@@ -101,7 +80,7 @@ export default function Home() {
 
                 <div className="flex items-center gap-3 opacity-70">
                   <span className="h-4 w-4 rounded-full border border-red-500" />
-                  <span>Hazır / VIP Link</span>
+                  <span>Hazır VIP Link</span>
                 </div>
 
                 <div className="flex items-center gap-3 opacity-50">
@@ -110,11 +89,8 @@ export default function Home() {
                 </div>
               </div>
 
-              <Link
-                href="/login"
-                className="mt-6 block rounded-xl bg-red-600 p-3 text-center font-black hover:bg-red-500"
-              >
-                Hemen Giriş Yap
+              <Link href="/order" className="mt-6 block rounded-xl bg-red-600 p-3 text-center font-black hover:bg-red-500">
+                Takip Sorgula
               </Link>
             </div>
           </div>
