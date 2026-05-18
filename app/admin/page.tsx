@@ -5,13 +5,13 @@ import { useState } from "react";
 type Order = {
   id: string;
   code: string;
+  tracking_number?: string;
   product: string;
   roblox_username: string;
   roblox_avatar_url?: string;
   user_email?: string;
   status: string;
   vip_link?: string;
-  created_at: string;
 };
 
 function statusText(status: string) {
@@ -32,6 +32,7 @@ export default function AdminPage() {
     const res = await fetch("/api/admin/orders", {
       headers: { "x-admin-password": password },
     });
+
     const data = await res.json();
 
     if (data.ok) {
@@ -64,6 +65,7 @@ export default function AdminPage() {
       <main className="min-h-screen bg-black flex items-center justify-center p-6">
         <div className="w-full max-w-sm rounded-3xl border border-red-500/40 p-6">
           <h1 className="text-3xl font-black text-red-500">Admin Panel</h1>
+
           <input
             className="mt-5 w-full rounded-xl bg-zinc-950 p-4"
             placeholder="Admin şifresi"
@@ -71,7 +73,11 @@ export default function AdminPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button className="mt-4 w-full rounded-xl bg-red-600 p-4 font-bold" onClick={load}>
+
+          <button
+            className="mt-4 w-full rounded-xl bg-red-600 p-4 font-bold"
+            onClick={load}
+          >
             Giriş
           </button>
         </div>
@@ -80,8 +86,9 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black p-6">
+    <main className="min-h-screen bg-black p-6 text-white">
       <h1 className="text-4xl font-black text-red-500">Teslimatlar</h1>
+
       <button onClick={load} className="mt-4 rounded-xl bg-zinc-800 px-4 py-2">
         Yenile
       </button>
@@ -102,7 +109,7 @@ export default function AdminPage() {
                 <div className="text-xl font-black text-red-400">{o.product}</div>
                 <div className="mt-1 text-zinc-300">Roblox: {o.roblox_username}</div>
                 <div className="text-zinc-400">Kod: {o.code}</div>
-                <div className="text-zinc-400">E-posta: {o.user_email || "Girişsiz"}</div>
+                <div className="text-zinc-400">Takip No: {o.tracking_number || "Yok"}</div>
                 <div className="mt-2 font-bold text-white">Durum: {statusText(o.status)}</div>
               </div>
             </div>
@@ -118,12 +125,15 @@ export default function AdminPage() {
               <button onClick={() => updateOrder(o.id, "preparing")} className="rounded-xl bg-yellow-600 px-4 py-2 font-bold">
                 Hazırlanıyor
               </button>
+
               <button onClick={() => updateOrder(o.id, "ready")} className="rounded-xl bg-blue-600 px-4 py-2 font-bold">
                 Hazır + VIP Link
               </button>
+
               <button onClick={() => updateOrder(o.id, "delivered")} className="rounded-xl bg-green-600 px-4 py-2 font-bold">
                 Sipariş Tamamlandı
               </button>
+
               <button onClick={() => updateOrder(o.id, "cancelled")} className="rounded-xl bg-red-700 px-4 py-2 font-bold">
                 İptal
               </button>
