@@ -23,6 +23,26 @@ function statusText(status: string) {
   return status;
 }
 
+function progressWidth(status: string) {
+  if (status === "preparing" || status === "waiting") return "w-1/3";
+  if (status === "ready") return "w-2/3";
+  if (status === "delivered") return "w-full";
+  return "w-0";
+}
+
+function progressColor(status: string) {
+  if (status === "preparing" || status === "waiting") {
+    return "bg-yellow-500 shadow-yellow-500/40";
+  }
+  if (status === "ready") {
+    return "bg-blue-500 shadow-blue-500/40";
+  }
+  if (status === "delivered") {
+    return "bg-green-500 shadow-green-500/40";
+  }
+  return "bg-zinc-600";
+}
+
 export default function ProfilePage() {
   const [email, setEmail] = useState("");
   const [orders, setOrders] = useState<Order[]>([]);
@@ -56,10 +76,17 @@ export default function ProfilePage() {
           <p className="mt-4 text-zinc-300">Hesap: {email}</p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link href="/redeem" className="rounded-xl bg-red-600 px-6 py-3 font-bold hover:bg-red-500">
+            <Link
+              href="/redeem"
+              className="rounded-xl bg-red-600 px-6 py-3 font-bold hover:bg-red-500"
+            >
               Kod Kullan
             </Link>
-            <button onClick={logout} className="rounded-xl border border-red-500/50 px-6 py-3 font-bold hover:bg-red-950">
+
+            <button
+              onClick={logout}
+              className="rounded-xl border border-red-500/50 px-6 py-3 font-bold hover:bg-red-950"
+            >
               Çıkış Yap
             </button>
           </div>
@@ -74,8 +101,11 @@ export default function ProfilePage() {
 
           <div className="mt-5 grid gap-4">
             {orders.map((order) => (
-              <div key={order.id} className="rounded-2xl border border-red-500/30 bg-zinc-950 p-5">
-                <div className="flex flex-wrap items-center justify-between gap-3">
+              <div
+                key={order.id}
+                className="rounded-2xl border border-red-500/30 bg-zinc-950 p-5 shadow-xl shadow-black/40"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="flex items-center gap-4">
                     {order.roblox_avatar_url && (
                       <img
@@ -87,7 +117,9 @@ export default function ProfilePage() {
 
                     <div>
                       <div className="text-xl font-black text-white">{order.product}</div>
-                      <div className="mt-1 text-sm text-zinc-400">Roblox: {order.roblox_username}</div>
+                      <div className="mt-1 text-sm text-zinc-400">
+                        Roblox: {order.roblox_username}
+                      </div>
                       <div className="text-sm text-zinc-500">Kod: {order.code}</div>
                     </div>
                   </div>
@@ -97,18 +129,62 @@ export default function ProfilePage() {
                   </div>
                 </div>
 
+                <div className="mt-6">
+                  <div className="mb-4 flex items-center justify-between text-xs font-bold uppercase tracking-wider">
+                    <span
+                      className={
+                        order.status === "preparing" || order.status === "waiting"
+                          ? "text-yellow-400"
+                          : "text-zinc-500"
+                      }
+                    >
+                      Hazırlanıyor
+                    </span>
+
+                    <span
+                      className={
+                        order.status === "ready" || order.status === "delivered"
+                          ? "text-blue-400"
+                          : "text-zinc-500"
+                      }
+                    >
+                      Hazır
+                    </span>
+
+                    <span
+                      className={
+                        order.status === "delivered"
+                          ? "text-green-400"
+                          : "text-zinc-500"
+                      }
+                    >
+                      Tamamlandı
+                    </span>
+                  </div>
+
+                  <div className="relative h-4 overflow-hidden rounded-full bg-zinc-800">
+                    <div
+                      className={`absolute left-0 top-0 h-full rounded-full shadow-lg transition-all duration-700 ${progressWidth(
+                        order.status
+                      )} ${progressColor(order.status)}`}
+                    />
+                  </div>
+                </div>
+
                 {order.status === "ready" && order.vip_link && (
                   <a
                     href={order.vip_link}
                     target="_blank"
-                    className="mt-4 inline-block rounded-xl bg-red-600 px-5 py-3 font-black hover:bg-red-500"
+                    className="mt-5 inline-block rounded-xl bg-red-600 px-5 py-3 font-black hover:bg-red-500"
                   >
                     VIP SUNUCUYA GİR
                   </a>
                 )}
 
                 {order.status === "delivered" && (
-                  <p className="mt-4 font-bold text-green-400">Teslimat tamamlandı ✅</p>
+                  <p className="mt-5 font-bold text-green-400">
+                    Teslimat tamamlandı ✅
+                  </p>
                 )}
               </div>
             ))}
