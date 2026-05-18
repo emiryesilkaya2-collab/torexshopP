@@ -9,6 +9,7 @@ type Order = {
   code: string;
   product: string;
   roblox_username: string;
+  roblox_avatar_url?: string;
   status: string;
   vip_link?: string;
   created_at: string;
@@ -50,15 +51,15 @@ export default function ProfilePage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-black via-red-950 to-black p-6">
       <div className="mx-auto max-w-4xl">
-        <div className="rounded-3xl border border-red-500/40 bg-black/80 p-7 text-center">
+        <div className="rounded-3xl border border-red-500/40 bg-black/80 p-7 text-center shadow-2xl shadow-red-900/30">
           <h1 className="text-4xl font-black text-red-500">PROFİL</h1>
           <p className="mt-4 text-zinc-300">Hesap: {email}</p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link href="/redeem" className="rounded-xl bg-red-600 px-6 py-3 font-bold">
+            <Link href="/redeem" className="rounded-xl bg-red-600 px-6 py-3 font-bold hover:bg-red-500">
               Kod Kullan
             </Link>
-            <button onClick={logout} className="rounded-xl border border-red-500/50 px-6 py-3 font-bold">
+            <button onClick={logout} className="rounded-xl border border-red-500/50 px-6 py-3 font-bold hover:bg-red-950">
               Çıkış Yap
             </button>
           </div>
@@ -75,10 +76,20 @@ export default function ProfilePage() {
             {orders.map((order) => (
               <div key={order.id} className="rounded-2xl border border-red-500/30 bg-zinc-950 p-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <div className="text-xl font-black text-white">{order.product}</div>
-                    <div className="mt-1 text-sm text-zinc-400">Roblox: {order.roblox_username}</div>
-                    <div className="text-sm text-zinc-500">Kod: {order.code}</div>
+                  <div className="flex items-center gap-4">
+                    {order.roblox_avatar_url && (
+                      <img
+                        src={order.roblox_avatar_url}
+                        alt={order.roblox_username}
+                        className="h-16 w-16 rounded-2xl border border-red-500/30 bg-black"
+                      />
+                    )}
+
+                    <div>
+                      <div className="text-xl font-black text-white">{order.product}</div>
+                      <div className="mt-1 text-sm text-zinc-400">Roblox: {order.roblox_username}</div>
+                      <div className="text-sm text-zinc-500">Kod: {order.code}</div>
+                    </div>
                   </div>
 
                   <div className="rounded-xl border border-red-500/40 bg-red-950/40 px-4 py-2 font-bold text-red-200">
@@ -97,7 +108,7 @@ export default function ProfilePage() {
                 )}
 
                 {order.status === "delivered" && (
-                  <p className="mt-4 text-green-400 font-bold">Teslimat tamamlandı ✅</p>
+                  <p className="mt-4 font-bold text-green-400">Teslimat tamamlandı ✅</p>
                 )}
               </div>
             ))}
